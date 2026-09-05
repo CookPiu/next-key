@@ -1,9 +1,3 @@
-// This configuration has not been run yet. Two things to watch on the first sync:
-//   1. the way untilBuild is disabled has changed between 2.x releases; check the current
-//      documentation if it fails to compile
-//   2. the compile dependency is PyCharm Community. The plugin only depends on
-//      com.intellij.modules.platform, so intellijIdeaCommunity works just as well and is
-//      stricter about accidental use of product-specific API
 plugins {
     id("java")
     id("org.jetbrains.intellij.platform") version "2.18.1"
@@ -21,8 +15,11 @@ repositories {
 
 dependencies {
     intellijPlatform {
-        // 对着 since-build 声明的最低版本编译，才能发现用到的新 API
-        pycharmCommunity("2024.3")
+        // Compile against the oldest version since-build claims, so use of newer API shows up
+        // here rather than in someone's IDE. IntelliJ IDEA Community is the baseline: the plugin
+        // only depends on com.intellij.modules.platform, and building against IC keeps
+        // product-specific API out by construction.
+        intellijIdeaCommunity("2024.3")
         pluginVerifier()
     }
 }
