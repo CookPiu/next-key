@@ -3,6 +3,14 @@
 Entries here are mirrored into `<change-notes>` in `plugin.xml`, which is what the Marketplace
 page displays.
 
+## 0.4.1
+
+- Fix the popup never appearing once the delay is set much above 500 ms. Holding a modifier
+  makes the OS repeat KEY_PRESSED, and every repeat restarted the countdown, pushing the
+  deadline permanently out of reach — the first repeat arrives around 500 ms in and the rest
+  roughly every 33 ms. Only a genuine change of modifiers restarts it now. The stock 500 ms
+  default happened to win that race, which is why it went unnoticed.
+
 ## 0.4.0
 
 - The hold delay is configurable, 100-2000 ms (`delay-ms` in the config file, a spinner in the

@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>io.github.cookpiu.nextkey</id>
     <name>Next Key</name>
-    <version>0.4.0</version>
+    <version>0.4.1</version>
     <vendor email="cookpiu@outlook.com" url="https://github.com/CookPiu/next-key">CookPiu</vendor>
 
     <description><![CDATA[
@@ -25,6 +25,11 @@
     ]]></description>
 
     <change-notes><![CDATA[
+        <p><b>0.4.1</b></p>
+        <ul>
+            <li>Fixed the popup never appearing when the delay was set much above 500 ms</li>
+        </ul>
+
         <p><b>0.4.0</b></p>
         <ul>
             <li>The hold delay is configurable, from 100 to 2000 ms</li>

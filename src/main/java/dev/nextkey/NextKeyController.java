@@ -136,7 +136,12 @@ public final class NextKeyController implements KeyEventDispatcher, AWTEventList
                 mods |= ShortcutIndex.maskOf(code);
                 if (hint.isShowing()) {
                     showModifiers(mods);
-                } else if (mods != 0) {
+                } else if (mods != 0 && (!showTimer.isRunning() || mods != pendingModifiers)) {
+                    // Holding a key down makes the OS repeat KEY_PRESSED, and restarting the
+                    // timer on every repeat would keep pushing the deadline back: the first
+                    // repeat lands around 500 ms in, the rest about every 33 ms, so any delay
+                    // at or above that never fires. Only a genuine change of modifiers restarts
+                    // the countdown.
                     pendingModifiers = mods;
                     showTimer.setInitialDelay(ShortcutIndex.settings().getDelayMs());
                     showTimer.restart();
