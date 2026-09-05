@@ -1,17 +1,21 @@
 # 发布到 JetBrains Marketplace
 
-## 提交前的检查项
+## 当前状态
 
-| 位置 | 项 | 状态 |
+0.4.0 已于 2026-09-05 提交，等待人工审核。审核通过前 Marketplace 搜索不到该插件。
+
+通过后需补的两处：两份 README 顶部加 Marketplace 徽章（版本号与下载量，需要审核分配的数字
+插件 ID），以及在 README 的安装一节补上插件页面链接。
+
+## 已确定的标识
+
+| 位置 | 项 | 值 |
 |---|---|---|
 | `plugin.xml` | `<id>` | `io.github.cookpiu.nextkey`，**发布后不可更改** |
-| `plugin.xml` | `<vendor email>` | `cookpiu@outlook.com`，会在插件页面公开显示 |
+| `plugin.xml` | `<vendor email>` | `cookpiu@outlook.com`，在插件页面公开显示 |
 | `plugin.xml` | `<vendor url>` | https://github.com/CookPiu/next-key |
 | `build.gradle.kts` | `group` | `io.github.cookpiu` |
 | `LICENSE` | 许可证 | MIT |
-| Marketplace | Vendor profile | 待注册，上传前需注册并接受开发者协议 |
-
-插件 ID 是唯一一项发布后无法修改的内容，其余均可随版本更新。
 
 ## 构建
 
@@ -34,12 +38,21 @@ gradlew publishPlugin    # 需要环境变量 INTELLIJ_MARKETPLACE_TOKEN
 `build.ps1` 用于日常迭代：直接调用目标 IDE 自带的 JBR 编译，classpath 指向该 IDE 的
 `lib` 目录，不下载任何依赖。它产出的是裸 jar，不能作为提交物。
 
-## 兼容范围待验证
+## 兼容范围
 
-`plugin.xml` 声明 `since-build="243"`（2024.3），而实际运行验证只在 PyCharm 2026.2.1
-（`PY-262.9437.214`）上完成。`build.gradle.kts` 将编译依赖固定在 2024.3，可在编译期
-暴露对更高版本 API 的依赖；`verifyPlugin` 进一步在字节码层面核对兼容性。这两步通过前
-不应按 243 提交；若未通过，应将下限提升至可通过的版本。
+`plugin.xml` 声明 `since-build="243"`（2024.3），不设上限。Plugin Verifier 于 2026-09-05
+对三个版本给出结论，均为 Compatible 且无警告：
+
+```
+IC-243.28141.41  (2024.3)   Compatible
+IC-251.29188.72  (2025.1)   Compatible
+IC-252.28539.97  (2025.2)   Compatible
+```
+
+加上在 PyCharm 2026.2.1（`PY-262.9437.214`）上的实际运行验证，覆盖范围为 2024.3 至
+2026.2。报告同时指出插件可动态启停而无需重启 IDE。
+
+改动代码后重跑 `verifyPlugin` 即可；三个 IDE 已缓存，纯验证约五分钟。
 
 所用平台 API 如下，均为长期稳定接口：
 
