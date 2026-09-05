@@ -1,47 +1,47 @@
 # 发布到 JetBrains Marketplace
 
-## 提交前必须填的
+## 提交前的检查项
 
-| 位置 | 项 | 现状 |
+| 位置 | 项 | 状态 |
 |---|---|---|
-| `plugin.xml` | `<vendor email>` | 已填 `cookpiu@outlook.com`（会在插件页面公开显示） |
-| `plugin.xml` | `<vendor url>` | 暂填 `https://github.com/CookPiu/next-key`，仓库还没建 |
-| `plugin.xml` | `<id>` | 暂定 `io.github.cookpiu.nextkey`。**发布后不能改**，先确认 |
-| `build.gradle.kts` | `group` | 同上，`io.github.cookpiu` |
-| `LICENSE` | 版权人 | CookPiu |
-| Marketplace | Vendor profile | 未注册。上传前要注册并接受开发者协议 |
+| `plugin.xml` | `<id>` | `io.github.cookpiu.nextkey`，**发布后不可更改** |
+| `plugin.xml` | `<vendor email>` | `cookpiu@outlook.com`，会在插件页面公开显示 |
+| `plugin.xml` | `<vendor url>` | https://github.com/CookPiu/next-key |
+| `build.gradle.kts` | `group` | `io.github.cookpiu` |
+| `LICENSE` | 许可证 | MIT |
+| Marketplace | Vendor profile | 待注册，上传前需注册并接受开发者协议 |
 
-`<id>` 必须全网唯一且永久不变，这是唯一一个改不了的决定，其余都能随版本更新。
+插件 ID 是唯一一项发布后无法修改的内容，其余均可随版本更新。
 
 ## 构建
 
-本机没装 Gradle。两条路：
+出插件包需要 Gradle，本仓库未提交 wrapper。两种方式：
 
-1. **用 IntelliJ IDEA 打开这个目录**（本机有 2025.2），它会自动下载 Gradle
-   发行版并生成 wrapper，然后在 Gradle 面板里跑任务。首次同步要下载 PyCharm
-   Community 2024.3 作为编译依赖，约 1GB，注意 `gradle.properties` 里那条缓存路径。
-2. 装了 Gradle 之后命令行跑 `gradle wrapper` 再用 `./gradlew`。
+1. 用 IntelliJ IDEA 打开本目录，IDE 会自动下载 Gradle 发行版并生成 wrapper，
+   之后在 Gradle 面板中执行任务。首次同步需要下载约 1GB 的 IDE 依赖作为编译基线，
+   缓存位置可在 `gradle.properties` 中指定。
+2. 本地已安装 Gradle 时，执行 `gradle wrapper` 生成 wrapper，之后使用 `./gradlew`。
 
 常用任务：
 
 ```
-gradlew buildPlugin      # 产出 build/distributions/next-key-0.4.0.zip，这就是提交物
-gradlew verifyPlugin     # 跑 Plugin Verifier，检查声明的版本区间是否真的兼容
-gradlew runIde           # 起一个装了本插件的沙箱 IDE
+gradlew buildPlugin      # 产出 build/distributions/next-key-<version>.zip，即提交物
+gradlew verifyPlugin     # 运行 Plugin Verifier，核对声明的版本区间
+gradlew runIde           # 启动装有本插件的沙箱 IDE
 gradlew publishPlugin    # 需要环境变量 INTELLIJ_MARKETPLACE_TOKEN
 ```
 
-`build.ps1` 那条手工路径保留着，用于快速迭代——它直接用本机 PyCharm 的 JBR 和
-lib 目录编译，不下载任何东西，但产出的是裸 jar，不能提交。
+`build.ps1` 用于日常迭代：直接调用目标 IDE 自带的 JBR 编译，classpath 指向该 IDE 的
+`lib` 目录，不下载任何依赖。它产出的是裸 jar，不能作为提交物。
 
-## 兼容范围必须实测
+## 兼容范围待验证
 
-`plugin.xml` 里写的 `since-build="243"`（2024.3）是估的，实际只在 PyCharm
-2026.2.1（`PY-262.9437.214`）上运行过。`build.gradle.kts` 已经把编译依赖钉在
-2024.3，能在编译期发现用了更新的 API；`verifyPlugin` 会进一步检查字节码层面的
-兼容性。这两步跑通之前，不要按 243 提交——真跑不过就把下限提到能过的版本。
+`plugin.xml` 声明 `since-build="243"`（2024.3），而实际运行验证只在 PyCharm 2026.2.1
+（`PY-262.9437.214`）上完成。`build.gradle.kts` 将编译依赖固定在 2024.3，可在编译期
+暴露对更高版本 API 的依赖；`verifyPlugin` 进一步在字节码层面核对兼容性。这两步通过前
+不应按 243 提交；若未通过，应将下限提升至可通过的版本。
 
-用到的平台 API 只有这些，都是长期稳定的：
+所用平台 API 如下，均为长期稳定接口：
 
 - `AppLifecycleListener`、`applicationService` + `Disposable`
 - `ApplicationManager.getApplication()`：`getService`、`executeOnPooledThread`
@@ -50,53 +50,52 @@ lib 目录编译，不下载任何东西，但产出的是裸 jar，不能提交
 - `DynamicBundle.getLocale()`、`Logger`
 - `Configurable`、`JBTable` / `JBScrollPane` / `JBCheckBox`
 
-其余全是 JDK 的 Swing 和 AWT。没有第三方依赖。
+其余均为 JDK 的 Swing 与 AWT，无第三方依赖。
 
 ## 发布更新
 
 每次发版：
 
-1. 改 `gradle.properties` 的 `pluginVersion` 和 `plugin.xml` 的 `<version>`（两处必须一致，
-   `build.ps1` 会校验；Gradle 构建以 `gradle.properties` 为准）
-2. 在 `CHANGELOG.md` 加一节，并把同样的内容写进 `plugin.xml` 的 `<change-notes>`
-   ——Marketplace 页面展示的是后者
-3. `gradlew verifyPlugin` 通过
-4. `set INTELLIJ_MARKETPLACE_TOKEN=...` 后 `gradlew publishPlugin`
+1. 更新 `gradle.properties` 的 `pluginVersion` 与 `plugin.xml` 的 `<version>`。两处必须
+   一致，`build.ps1` 会校验；Gradle 构建以 `gradle.properties` 为准。
+2. 在 `CHANGELOG.md` 增加一节，并将同样内容写入 `plugin.xml` 的 `<change-notes>`。
+   Marketplace 页面展示的是后者。
+3. 确认 `gradlew verifyPlugin` 通过。
+4. 设置 `INTELLIJ_MARKETPLACE_TOKEN` 环境变量后执行 `gradlew publishPlugin`。
 
-**所有更新都要人工审核**，通常两个工作日内出结果，超过 3–4 个工作日没动静就发信到
-marketplace@jetbrains.com。上传之后只有兼容性范围（`since-build` / `until-build`）能改，
-别的写错了只能再发一版，所以第 1、2 步值得多看一眼。
+所有更新均需人工审核，通常在两个工作日内出结果；超过 3–4 个工作日无反馈可联系
+marketplace@jetbrains.com。上传后仅兼容性范围（`since-build` / `until-build`）可修改，
+其余内容有误只能发布新版本，因此第 1、2 步需要复核。
 
-想跳过等待可以发到自定义 release channel（`publishPlugin` 的 `channels` 参数，例如
-`eap`）：当 stable 频道存在 120 天以内的已批准版本时，这类更新可以自动批准，用户手动
-添加订阅源后能立刻装到；stable 频道仍走正常审核。
+发布到自定义 release channel（`publishPlugin` 的 `channels` 参数，如 `eap`）可以跳过等待：
+当 stable 频道存在 120 天以内的已批准版本时，此类更新可自动批准，用户添加订阅源后即可
+安装；stable 频道仍走正常审核。
 
 ## 审核要点
 
-JetBrains 对每个新插件和每次更新做人工审核。对照
+JetBrains 对每个新插件及每次更新执行人工审核。对照
 [Approval Guidelines](https://plugins.jetbrains.com/docs/marketplace/jetbrains-marketplace-approval-guidelines.html)：
 
-- 名称和描述要能说清插件做什么，且**英文描述必须是第一份描述** —— 已在
-  `plugin.xml` 的 `<description>` 里写好
-- 插件必须与描述行为一致
-- 需要提供 EULA，开源许可证即可 —— 已加 MIT
-- 单个插件包上限 400 MB，这个插件 50 KB 上下
+- 名称与描述需明确说明插件功能，且英文描述必须是第一份描述——已在 `plugin.xml` 的
+  `<description>` 中提供
+- 插件行为需与描述一致
+- 需提供 EULA，开源许可证即可——已采用 MIT
+- 单个插件包上限 400 MB，本插件约 50 KB
 
-建议再补一两张截图挂到插件页面（Marketplace 页面上传，不进包）。
+插件页面还需补充截图（在 Marketplace 页面上传，不打入插件包），建议至少包含提示面板
+与设置界面各一张。
 
-## 还没做的
+## 尚未完成
 
-- **没有自动化测试**。逻辑里值得测的是 `ShortcutIndex.mergeNumbered`、
-  `Category.guess`、`HintSettings` 的解析与回写，都是纯函数，好写。
-  目前只有 `tools/RenderTest.java` 这个离线渲染工具。
-- **只在 Windows 默认 keymap 上验证过**。内置白名单是按它的 action id 列的；
-  Mac 与 Eclipse 等 keymap 里 action id 相同、快捷键不同，理论上没问题，没实测。
-  Mac 上还多一个 Cmd 修饰键，`Category` 与面板都能处理，同样没实测。
-- **设置界面只能装进 IDE 里验证**。`JBTable` 在 IDE 外初始化会抛
-  `Must be precomputed`，`tools/RenderTest.java` 只能渲染提示面板。
-- **单独按住 Shift 会触发**。Shift 组默认全隐藏所以看不到弹窗，但如果用户开了
-  `show-all`，打字时按住 Shift 停顿就会弹。发布前可以考虑加一个"忽略哪些修饰键"
-  的开关。
-- **诊断日志留在了代码里**：`NextKeyBundle` 会打印一行取到的 locale，
-  `ShortcutIndex` 会打印索引构建耗时。都是 info 级、每次启动各一行，
-  留着便于排查，介意的话发布前删掉。
+- **无自动化测试**。适合测试的部分是 `ShortcutIndex.mergeNumbered`、`Category.guess`
+  以及 `HintSettings` 的解析与回写，均为纯函数。当前仅有 `tools/RenderTest.java`
+  这一离线渲染工具。
+- **仅在 Windows 默认 keymap 上验证**。内置的常用动作清单依据其 action id 编写；
+  Mac、Eclipse 等 keymap 中 action id 相同而快捷键不同，预期可用但未实测。Mac 另有
+  Cmd 修饰键，`Category` 与面板均已支持，同样未实测。
+- **设置界面只能在 IDE 内验证**。`JBTable` 在 IDE 外初始化会抛 `Must be precomputed`，
+  `tools/RenderTest.java` 仅能渲染提示面板。
+- **单独按住 Shift 会触发面板**。Shift 组动作默认全部隐藏，开启 `show-all` 后打字期间
+  按住 Shift 停顿会弹出。可考虑增加"忽略指定修饰键"的开关。
+- **诊断日志保留在代码中**：`NextKeyBundle` 输出一行界面语言，`ShortcutIndex` 输出索引
+  构建耗时，均为 info 级、每次启动各一行。如需精简可在发布前移除。

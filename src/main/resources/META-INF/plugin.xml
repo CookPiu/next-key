@@ -5,43 +5,38 @@
     <vendor email="cookpiu@outlook.com" url="https://github.com/CookPiu/next-key">CookPiu</vendor>
 
     <description><![CDATA[
-        <p><b>Hold a modifier. See what you can press next.</b></p>
+        <p><b>Hold a modifier key, see what you can press next.</b></p>
 
-        <p>Hold <b>Ctrl</b> — or Alt, or Ctrl+Shift, or any other combination — for half a second
-        and a panel lists every shortcut that starts with it. Add <b>Alt</b> while the panel is up
-        and it switches to the Ctrl+Alt list instantly; release it and it switches back. Let go of
-        everything and the panel disappears.</p>
+        <p>Hold <b>Ctrl</b> for half a second. A panel appears listing every shortcut that starts
+        with Ctrl. Keep holding and press <b>Alt</b> as well — the list becomes the Ctrl+Alt
+        shortcuts. Let go and it disappears.</p>
 
-        <p>Press the first stroke of a two-stroke shortcut and every possible second stroke is
-        listed immediately, with no delay. Those prefix keys are marked in the modifier list as
-        well, so you can tell at a glance which keys lead somewhere.</p>
+        <p>Nothing to set up, and it never interferes with typing.</p>
 
-        <p>Everything is read from your active keymap, so the panel always matches your own
-        bindings, including the ones your plugins add. Keys are labelled the way they are printed
-        on the keyboard — <code>[</code>, <code>/</code>, <code>-</code>, <code>`</code>,
-        <code>↑</code>, <code>PgUp</code>, <code>Num *</code> — instead of the internal names Swing
-        reports for them.</p>
+        <p><b>What it shows.</b> Shortcuts are grouped by what they do: editing, navigation,
+        search, refactoring, running and debugging, version control, windows. Keys are labelled the
+        way they are on the keyboard — <code>[</code>, <code>/</code>, <code>-</code>,
+        <code>↑</code>, <code>PgUp</code>.</p>
 
-        <p><b>Staying readable.</b> A full keymap hides several hundred shortcuts behind Ctrl
-        alone, far more than anyone can take in at a glance. So the panel shows common actions
-        only, groups them by what they do — Editing, Navigation, Search, Refactor, Run &amp; Debug,
-        Version Control, Windows &amp; Tools — and folds duplicates: one action bound to several
-        keys becomes <code>C,Ins</code>, and the ten bookmark jumps on Ctrl+0..9 collapse into a
-        single <code>0-9</code> row.</p>
+        <p>The list is your own keymap. Whatever bindings you actually use are what shows up,
+        including the ones other plugins add. Rebind something and the panel follows.</p>
 
-        <p><b>Yours to adjust.</b> In <b>Settings | Tools | Next Key</b> every shortcut in the
-        keymap is listed in a table: switch any of them on or off, rename one to whatever you
-        actually call it, move it to another category, change how long a modifier has to be held,
-        and set the panel's opacity. The same settings live in a plain text file,
-        <code>next-key.conf</code> in the IDE config directory, which can be edited by hand just
-        as well — each line carries the shortcut and the original action name as a comment, so
-        there is never a need to look up an action ID somewhere else.</p>
+        <p>Repeats are collapsed. An action bound to two keys takes one row, shown as
+        <code>C,Ins</code>. The ten bookmark shortcuts on Ctrl+0 through Ctrl+9 take one row, shown
+        as <code>0-9</code>.</p>
 
-        <ul>
-            <li>Key events are never consumed, so nothing here can interfere with typing</li>
-            <li>Ctrl+wheel zooming and Ctrl+hover inspection do not raise the panel</li>
-            <li>English and Simplified Chinese, following the IDE language setting</li>
-        </ul>
+        <p><b>Shortcuts that need two presses.</b> Press the first one and every key that can
+        follow appears immediately. In the main list those keys are marked <code>&#8594; 5 more</code>,
+        so it is clear which ones lead somewhere.</p>
+
+        <p><b>Making it yours.</b> Out of the box the panel lists the shortcuts most people use.
+        Everything else, and every detail of how it looks, is in <b>Settings | Tools | Next Key</b>:
+        show or hide any shortcut in the keymap, rename one to whatever you call it, move it to a
+        different category or invent your own, change how long a modifier has to be held before the
+        panel appears, and make the panel more transparent. The same settings live in a plain text
+        file, if editing that is easier.</p>
+
+        <p>Available in English and Simplified Chinese, following the IDE language setting.</p>
     ]]></description>
 
     <change-notes><![CDATA[

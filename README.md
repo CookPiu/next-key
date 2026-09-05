@@ -2,45 +2,54 @@
 
 [中文](README.zh-CN.md)
 
-Hold a modifier in a JetBrains IDE and see what you can press next.
+**Hold a modifier key, see what you can press next.**
 
-Hold `Ctrl` — or Alt, or Ctrl+Shift, or any other combination — for half a second and a panel
-appears in the bottom right corner listing every shortcut that starts with it.
+Hold `Ctrl` for half a second. A panel appears listing every shortcut that starts with Ctrl.
+Keep holding and press `Alt` as well — the list becomes the Ctrl+Alt shortcuts. Let go and it
+disappears.
 
-- **Follows the modifiers as you go.** Add `Alt` while the panel is up and it switches to the
-  Ctrl+Alt list at once, without waiting again; release `Alt` and it switches back. The panel only
-  goes away once every modifier is up.
-- **Two-stroke shortcuts.** Press the first stroke of one (`Ctrl+Num *`, say) and every possible
-  second stroke is listed immediately. Those prefix keys are marked `→ N more` in the modifier
-  list, so it is obvious which keys lead somewhere.
-- **Stays out of the way.** Pressing a key that is not a prefix dismisses the panel, and moving
-  the mouse while it is still counting down cancels it — Ctrl+wheel zooming and Ctrl+hover
-  inspection never raise it.
+Nothing to set up, and it never interferes with typing.
 
-Entries are grouped by what the actions do (Editing, Navigation, Search, Refactor, Run & Debug,
-Version Control, Windows & Tools, Other), guessed from how the action id is named and adjustable
-per action.
+## What it shows
 
-Keys are labelled the way they are printed on the keyboard: `[`, `/`, `-`, `` ` ``, `↑`, `PgUp`,
-`Num *`, rather than the `Open Bracket`, `Slash`, `Subtract`, `Back Quote`, `Up`, `Page Up`,
-`Multiply` that `KeyEvent.getKeyText()` reports. That table also pins those names to English —
-`getKeyText` resolves against the JVM locale and would otherwise translate them.
+Shortcuts are grouped by what they do: editing, navigation, search, refactoring, running and
+debugging, version control, windows. Keys are labelled the way they are on the keyboard — `[`,
+`/`, `-`, `` ` ``, `↑`, `PgUp`.
 
-A full keymap hides several hundred shortcuts behind Ctrl alone, so only common actions are listed
-by default (a built-in list of about 120), and duplicates are folded: one action bound to several
-keys becomes `C,Ins`, and the ten bookmark jumps on Ctrl+0..9 collapse into a single `0-9` row.
+The list is your own keymap. Whatever bindings you actually use are what shows up, including the
+ones other plugins add. Rebind something and the panel follows.
 
-## Configuration
+Repeats are collapsed. An action bound to two keys takes one row, shown as `C,Ins`. The ten
+bookmark shortcuts on Ctrl+0 through Ctrl+9 take one row, shown as `0-9`.
 
-**Settings UI** — `Settings | Tools | Next Key`. The table lists every shortcut in the active
-keymap that starts with a modifier. Tick one to show it, rename it under *Display as*, pick a
-category from the dropdown or type your own. Above the table are two global switches, the hold
-delay, the panel opacity and a filter box. Applying rewrites the config file in full.
+Some shortcuts need two presses. Press the first — `Ctrl+Num *` for code folding, say — and every
+key that can follow appears immediately. In the main list those keys are marked `→ 5 more`, so it
+is clear which ones lead somewhere.
 
-**Config file** — `next-key.conf` in the IDE config directory (on Windows,
-`%APPDATA%\JetBrains\<IDE><version>\`). It is the same store the settings UI uses, so editing it
-by hand works just as well. It is generated from the active keymap on first run and grouped by
-modifier:
+The panel stays out of the way: press a key that leads nowhere and it goes; move the mouse while
+it is still counting down and it never appears. Ctrl+wheel zooming and Ctrl+hover inspection do
+not bring it up.
+
+## Making it yours
+
+Out of the box the panel lists the shortcuts most people use. Everything else, and every detail of
+how it looks, is in **Settings | Tools | Next Key**:
+
+- show or hide any shortcut in the keymap
+- rename one to whatever you call it
+- move it to a different category, or invent your own
+- change how long a modifier has to be held before the panel appears
+- make the panel more transparent
+
+The same settings live in a plain text file, if editing that is easier.
+
+## The config file
+
+The settings screen and the config file are the same thing — whichever is more convenient.
+
+The file is `next-key.conf`, in the IDE config directory (on Windows,
+`%APPDATA%\JetBrains\<IDE><version>\`). It is written from the active keymap the first time the
+plugin runs, and grouped by modifier:
 
 ```
 show-all = false        # true shows every shortcut and ignores the per-action switches below
@@ -55,13 +64,23 @@ GotoDeclaration = Jump to source    # Ctrl+B       Go to Declaration
 ShowSettings = Settings | Windows   # Ctrl+Alt+S   Settings
 ```
 
-Four forms per line: `<id>` shows it, `-<id>` hides it, `<id> = Name` renames it, and
-`<id> = Name | Category` also moves it (leave the name empty as `<id> = | Category`). Everything
-after `#` is a comment, and the comment on each line carries that action's shortcut and original
-name, so there is no need to look up an action id elsewhere. Categories are stored as the stable
-English values (`Editing`, `Navigation`, …); any other text becomes a category of its own.
+Four forms per line:
 
-Changes apply to the next popup, no restart — the index cache keys on the file's timestamp.
+| Line | Effect |
+|---|---|
+| `EditorDuplicate` | show it, under the name the IDE gives it |
+| `-EditorDuplicate` | hide it |
+| `EditorDuplicate = Clone line` | show it under a name of your own |
+| `EditorDuplicate = Clone line \| Editing` | and put it in a category |
+
+Leave the name out as `EditorDuplicate = | Editing` to change only the category. Anything after
+`#` is a comment, and the comment on every line already carries that shortcut and the original
+action name, so there is no need to look an action id up anywhere.
+
+Categories are written in English (`Editing`, `Navigation`, and so on) and translated for display.
+Any other text becomes a category of its own.
+
+Changes take effect the next time the panel appears. No restart.
 
 ## Building
 
@@ -160,23 +179,19 @@ so switching languages never invalidates what is in the config file.
 
 ## Known limitations
 
-- Editing a shortcut within the same keymap needs an IDE restart to show up; switching keymaps
-  rebuilds the index on its own. This is the trade for not subscribing to the platform's keymap
-  change events, see `ShortcutIndex.get()`.
-- Holding Shift on its own also triggers the panel. Shift-only shortcuts are rare, and while
-  typing a letter key follows immediately and cancels the countdown, so it seldom comes up.
-- The panel hides itself after `AUTO_HIDE_MS`, guarding against a modifier's KEY_RELEASED being
-  lost when focus moves to another application.
-- The built-in list of common actions is written against the platform's own action ids; actions
-  from IDE-specific plugins are not in it and have to be switched on in `next-key.conf`.
-- Shortcuts a newly installed plugin brings in are not added to an existing `next-key.conf`. They
-  are judged by the built-in list instead, which mostly means hidden. Delete the file and restart
-  to regenerate it.
-- Opacity depends on window compositing and does nothing over remote desktop or under some Linux
-  compositors, where the panel simply stays opaque; rounded corners degrade to square the same way.
-- When a whole category does not fit, column splitting falls back to filling to the screen height,
-  which can leave the columns visibly uneven. Truly even columns would mean breaking a category
-  across two columns, which reads worse.
+- Rebinding a shortcut within the same keymap needs an IDE restart before the panel reflects it.
+  Switching to a different keymap is picked up on its own.
+- Holding Shift alone also brings the panel up. Few shortcuts are bound to Shift alone, and while
+  typing the letter key that follows cancels the countdown, so this rarely comes up in practice.
+- The panel hides itself after ten seconds, in case a modifier release goes missing when focus
+  moves to another application.
+- The actions shown by default are the ones built into the platform. Actions that come from
+  IDE-specific plugins start out hidden and can be switched on individually.
+- Shortcuts added by a newly installed plugin do not appear in an existing config file. Delete the
+  file and restart to have it regenerated.
+- Transparency and rounded corners depend on window compositing. Over remote desktop and under
+  some Linux compositors the panel stays opaque with square corners.
+- Columns can end up uneven when one category is too tall to sit alongside the others.
 
 ## Uninstalling
 

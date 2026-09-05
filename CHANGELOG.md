@@ -1,6 +1,7 @@
 # Changelog
 
-发版时这里的条目要同步到 `plugin.xml` 的 `<change-notes>`（Marketplace 展示的是后者）。
+Entries here are mirrored into `<change-notes>` in `plugin.xml`, which is what the Marketplace
+page displays.
 
 ## 0.4.0
 

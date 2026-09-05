@@ -42,7 +42,7 @@ $Jar = Join-Path $Out "next-key.jar"
 $javac = Join-Path $Ide "jbr\bin\javac.exe"
 if (-not (Test-Path $javac)) { throw "找不到 javac: $javac" }
 
-# JBR 不带 jar 工具，借用本机 JDK 8 的；jar 只做归档，与字节码版本无关
+# JBR 不带 jar 工具，改用系统上任一 JDK 的；jar 只做归档，与字节码版本无关
 $jarTool = "D:\JDK1.8\bin\jar.exe"
 if (-not (Test-Path $jarTool)) {
     $jarTool = (Get-Command jar -ErrorAction SilentlyContinue).Source

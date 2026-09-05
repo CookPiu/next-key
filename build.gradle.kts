@@ -1,7 +1,9 @@
-// 注意：这份配置还没有实际跑过一次（本机没装 Gradle），首次同步时留意两处：
-//   1. untilBuild 的禁用写法在 2.x 各小版本间变过，编译不过就查当前文档
-//   2. 编译依赖用的是 PyCharm Community；插件只依赖 com.intellij.modules.platform，
-//      换成 intellijIdeaCommunity 同样可以，而且更能挡住误用产品特有 API
+// This configuration has not been run yet. Two things to watch on the first sync:
+//   1. the way untilBuild is disabled has changed between 2.x releases; check the current
+//      documentation if it fails to compile
+//   2. the compile dependency is PyCharm Community. The plugin only depends on
+//      com.intellij.modules.platform, so intellijIdeaCommunity works just as well and is
+//      stricter about accidental use of product-specific API
 plugins {
     id("java")
     id("org.jetbrains.intellij.platform") version "2.18.1"
