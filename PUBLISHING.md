@@ -74,7 +74,11 @@ IC-252.28539.97  (2025.2)   Compatible
 2. 在 `CHANGELOG.md` 增加一节，并将同样内容写入 `plugin.xml` 的 `<change-notes>`。
    Marketplace 页面展示的是后者。
 3. 确认 `gradlew verifyPlugin` 通过。
-4. 设置 `INTELLIJ_MARKETPLACE_TOKEN` 环境变量后执行 `gradlew publishPlugin`。
+4. **装进真实 IDE 回归一遍核心功能**，且必须覆盖非默认配置。Verifier 只做静态字节码
+   兼容性检查，覆盖不了运行时时序问题——0.4.0 三个 IDE 全部 Compatible，但延时一旦
+   调到 500 ms 以上面板就完全不出现，原因是系统重复发送的 KEY_PRESSED 一直在重置
+   倒计时。至少要试：延时的最小值、最大值和一个中间值，不透明度调低，禁用后重新启用。
+5. 设置 `INTELLIJ_MARKETPLACE_TOKEN` 环境变量后执行 `gradlew publishPlugin`。
 
 所有更新均需人工审核，通常在两个工作日内出结果；超过 3–4 个工作日无反馈可联系
 marketplace@jetbrains.com。上传后仅兼容性范围（`since-build` / `until-build`）可修改，
