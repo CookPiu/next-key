@@ -17,6 +17,9 @@ page displays.
   bundle loading no longer falls back to the JVM default locale
 - The shortcut index is built in the background at startup, so the first press no longer
   blocks on it
+- Enabling the plugin from Settings | Plugins takes effect immediately. Only
+  `AppLifecycleListener` was wired up before, which fires at IDE startup and not when a plugin
+  is switched on, leaving it enabled but inert until the next restart
 - Settings UI layout fixes: the opacity slider no longer swallows its own value label,
   columns keep readable widths, the footer note wraps instead of being clipped
 

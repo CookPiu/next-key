@@ -38,6 +38,8 @@
                 operating system locale</li>
             <li>The shortcut index is built in the background at startup, so the very first
                 press shows the popup right away</li>
+            <li>Enabling the plugin from Settings | Plugins now takes effect immediately,
+                without restarting the IDE</li>
         </ul>
 
         <p><b>0.3.0</b></p>
@@ -64,5 +66,8 @@
     <applicationListeners>
         <listener class="dev.nextkey.NextKeyListener"
                   topic="com.intellij.ide.AppLifecycleListener"/>
+        <!-- Also pick up being enabled from Settings | Plugins without a restart -->
+        <listener class="dev.nextkey.NextKeyListener"
+                  topic="com.intellij.ide.plugins.DynamicPluginListener"/>
     </applicationListeners>
 </idea-plugin>
