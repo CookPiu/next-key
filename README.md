@@ -12,7 +12,7 @@ disappears.
 
 Nothing to set up, and it never interferes with typing.
 
-<!-- Screenshots: the popup over an editor, and Settings | Tools | Next Key. -->
+<img src="docs/popup.png" alt="The panel listing every Ctrl+Alt shortcut, grouped by category" width="340">
 
 ## Installation
 
@@ -55,6 +55,8 @@ how it looks, is in **Settings | Tools | Next Key**:
 - move it to a different category, or invent your own
 - change how long a modifier has to be held before the panel appears
 - make the panel more transparent
+
+![Settings, Tools, Next Key](docs/settings.png)
 
 The same settings live in a plain text file, if editing that is easier.
 

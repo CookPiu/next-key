@@ -1,0 +1,10 @@
+<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+  <!-- The modifier being held -->
+  <rect x="5" y="3" width="30" height="17" rx="3.6" fill="#61AFEF"/>
+  <text x="20" y="15.4" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5"
+        font-weight="600" fill="#1F2A36" text-anchor="middle">Ctrl</text>
+  <!-- The shortcuts it brings up -->
+  <rect x="5" y="24.5" width="30" height="3.2" rx="1.6" fill="#61AFEF"/>
+  <rect x="5" y="30" width="30" height="3.2" rx="1.6" fill="#61AFEF" fill-opacity="0.62"/>
+  <rect x="5" y="35.5" width="30" height="3.2" rx="1.6" fill="#61AFEF" fill-opacity="0.34"/>
+</svg>

@@ -11,7 +11,7 @@
 
 装上就能用，也不会妨碍打字。
 
-<!-- Screenshots: the popup over an editor, and Settings | Tools | Next Key. -->
+<img src="docs/popup.png" alt="面板列出所有 Ctrl+Alt 快捷键，按分类分组" width="340">
 
 ## 安装
 
@@ -49,6 +49,8 @@ Ctrl+悬停看类型都不会把它招出来。
 - 换个分类，或者自己起一个
 - 改按住多久才弹出
 - 把面板调得透明一些
+
+![Settings、Tools、Next Key](docs/settings.png)
 
 这些设置同样存在一个纯文本文件里，改文件更顺手的话也可以。
 
