@@ -1,5 +1,7 @@
 # Next Key
 
+[![License](https://img.shields.io/github/license/CookPiu/next-key)](LICENSE)
+
 [中文](README.zh-CN.md)
 
 **Hold a modifier key, see what you can press next.**
@@ -9,6 +11,19 @@ Keep holding and press `Alt` as well — the list becomes the Ctrl+Alt shortcuts
 disappears.
 
 Nothing to set up, and it never interferes with typing.
+
+<!-- Screenshots: the popup over an editor, and Settings | Tools | Next Key. -->
+
+## Installation
+
+Works with IntelliJ IDEA, PyCharm, WebStorm and the other JetBrains IDEs.
+
+From inside the IDE: **Settings | Plugins | Marketplace**, search for *Next Key*, install and
+restart.
+
+To install a build yourself, put the jar in `<plugins>/next-key/lib/` and restart, where
+`<plugins>` is the IDE's plugins directory. `build.ps1 -Install` does this for you — see
+[Building](#building).
 
 ## What it shows
 
@@ -195,4 +210,19 @@ so switching languages never invalidates what is in the config file.
 
 ## Uninstalling
 
-Delete the `next-key` directory from the IDE's plugins directory and restart.
+**Settings | Plugins**, find Next Key, uninstall and restart. For a manually installed build,
+delete the `next-key` directory from the IDE's plugins directory instead.
+
+Settings live in `next-key.conf` in the IDE config directory and are left behind; delete that file
+too for a clean slate.
+
+## Contributing
+
+Bug reports and feature requests go to
+[Issues](https://github.com/CookPiu/next-key/issues). Pull requests are welcome — `build.ps1`
+gets a working build without any Gradle setup, and `tools/RenderTest.java` renders the panel
+offline so layout changes can be checked without launching an IDE.
+
+## License
+
+[MIT](LICENSE)

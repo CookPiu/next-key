@@ -82,8 +82,18 @@ JetBrains 对每个新插件及每次更新执行人工审核。对照
 - 需提供 EULA，开源许可证即可——已采用 MIT
 - 单个插件包上限 400 MB，本插件约 50 KB
 
-插件页面还需补充截图（在 Marketplace 页面上传，不打入插件包），建议至少包含提示面板
-与设置界面各一张。
+插件页面还需补充截图（在 Marketplace 页面上传，不打入插件包），至少包含提示面板与设置
+界面各一张。同一组截图也应放进仓库并在两份 README 中引用，占位注释已留在文件顶部。
+
+上传时需要选择标签。同类插件的取法：Key Promoter X 用 Notification and Visualizers +
+Productivity，Which-Key 用 Editor，Which Key Lazy 用 Editor + Navigation。本插件适用
+Editor 与 Productivity。
+
+描述长度参照同类插件控制在数段之内：Which Key Lazy 约 220 字符，Which-Key 约 550 字符，
+Key Promoter X 约六句加链接。插件列表中用户只会读前两句。
+
+发布后可在 README 顶部补上 Marketplace 徽章（版本号与下载量），插件 ID 确定后
+shields.io 的对应徽章即可生效。
 
 ## 尚未完成
 

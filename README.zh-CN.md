@@ -1,5 +1,7 @@
 # Next Key
 
+[![License](https://img.shields.io/github/license/CookPiu/next-key)](LICENSE)
+
 [English](README.md)
 
 **按住修饰键，看清接下来能按什么。**
@@ -8,6 +10,17 @@
 变成 Ctrl+Alt 的那一组。松开手，面板消失。
 
 装上就能用，也不会妨碍打字。
+
+<!-- Screenshots: the popup over an editor, and Settings | Tools | Next Key. -->
+
+## 安装
+
+适用于 IntelliJ IDEA、PyCharm、WebStorm 等各款 JetBrains IDE。
+
+在 IDE 里：**Settings | Plugins | Marketplace**，搜索 *Next Key*，安装后重启。
+
+想装自己构建的版本，把 jar 放进 IDE 插件目录下的 `next-key/lib/` 再重启即可；
+`build.ps1 -Install` 会代劳，见[构建](#构建)。
 
 ## 面板里有什么
 
@@ -176,4 +189,17 @@ IDE 里看。
 
 ## 卸载
 
-删除 IDE 插件目录下的 `next-key` 目录后重启。
+**Settings | Plugins** 里找到 Next Key，卸载后重启。手工安装的版本则直接删掉 IDE 插件
+目录下的 `next-key` 目录。
+
+设置存在 IDE 配置目录下的 `next-key.conf`，卸载不会带走它，想彻底清干净就一并删掉。
+
+## 参与
+
+问题和需求提到 [Issues](https://github.com/CookPiu/next-key/issues)。欢迎 PR——用
+`build.ps1` 不必配置 Gradle 就能构建，`tools/RenderTest.java` 可以离线渲染面板，改排版
+不用每次都起一个 IDE 来看。
+
+## 许可证
+
+[MIT](LICENSE)
