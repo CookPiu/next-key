@@ -1,0 +1,88 @@
+<idea-plugin>
+    <id>io.github.cookpiu.nextkey</id>
+    <name>Next Key</name>
+    <version>0.4.0</version>
+    <vendor email="cookpiu@outlook.com" url="https://github.com/CookPiu/next-key">CookPiu</vendor>
+
+    <description><![CDATA[
+        <p><b>Hold a modifier. See what you can press next.</b></p>
+
+        <p>Hold <b>Ctrl</b> — or Alt, or Ctrl+Shift, or any other combination — for half a second
+        and a panel lists every shortcut that starts with it. Add <b>Alt</b> while the panel is up
+        and it switches to the Ctrl+Alt list instantly; release it and it switches back. Let go of
+        everything and the panel disappears.</p>
+
+        <p>Press the first stroke of a two-stroke shortcut and every possible second stroke is
+        listed immediately, with no delay. Those prefix keys are marked in the modifier list as
+        well, so you can tell at a glance which keys lead somewhere.</p>
+
+        <p>Everything is read from your active keymap, so the panel always matches your own
+        bindings, including the ones your plugins add. Keys are labelled the way they are printed
+        on the keyboard — <code>[</code>, <code>/</code>, <code>-</code>, <code>`</code>,
+        <code>↑</code>, <code>PgUp</code>, <code>Num *</code> — instead of the internal names Swing
+        reports for them.</p>
+
+        <p><b>Staying readable.</b> A full keymap hides several hundred shortcuts behind Ctrl
+        alone, far more than anyone can take in at a glance. So the panel shows common actions
+        only, groups them by what they do — Editing, Navigation, Search, Refactor, Run &amp; Debug,
+        Version Control, Windows &amp; Tools — and folds duplicates: one action bound to several
+        keys becomes <code>C,Ins</code>, and the ten bookmark jumps on Ctrl+0..9 collapse into a
+        single <code>0-9</code> row.</p>
+
+        <p><b>Yours to adjust.</b> In <b>Settings | Tools | Next Key</b> every shortcut in the
+        keymap is listed in a table: switch any of them on or off, rename one to whatever you
+        actually call it, move it to another category, change how long a modifier has to be held,
+        and set the panel's opacity. The same settings live in a plain text file,
+        <code>next-key.conf</code> in the IDE config directory, which can be edited by hand just
+        as well — each line carries the shortcut and the original action name as a comment, so
+        there is never a need to look up an action ID somewhere else.</p>
+
+        <ul>
+            <li>Key events are never consumed, so nothing here can interfere with typing</li>
+            <li>Ctrl+wheel zooming and Ctrl+hover inspection do not raise the panel</li>
+            <li>English and Simplified Chinese, following the IDE language setting</li>
+        </ul>
+    ]]></description>
+
+    <change-notes><![CDATA[
+        <p><b>0.4.0</b></p>
+        <ul>
+            <li>The hold delay is configurable, from 100 to 2000 ms</li>
+            <li>Adjustable popup opacity</li>
+            <li>Key names now match the keyboard: <code>[</code>, <code>/</code>,
+                <code>PgUp</code>, <code>↑</code> instead of the internal names Swing reports.
+                They no longer follow the OS locale either</li>
+            <li>Keys are drawn as keycaps; the popup has rounded corners</li>
+            <li>Long action names are truncated so one entry cannot widen a whole column</li>
+            <li>The interface language now follows the IDE language setting rather than the
+                operating system locale</li>
+            <li>The shortcut index is built in the background at startup, so the very first
+                press shows the popup right away</li>
+        </ul>
+
+        <p><b>0.3.0</b></p>
+        <ul>
+            <li>Entries are grouped by category</li>
+            <li>Settings UI for showing, renaming and re-categorizing individual shortcuts</li>
+            <li>English and Simplified Chinese interface</li>
+            <li>Listeners are now removed when the plugin is disabled or unloaded</li>
+        </ul>
+    ]]></change-notes>
+
+    <idea-version since-build="243"/>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService serviceImplementation="dev.nextkey.NextKeyController"/>
+        <applicationConfigurable instance="dev.nextkey.HintConfigurable"
+                                 id="dev.nextkey.settings"
+                                 displayName="Next Key"
+                                 groupId="tools"/>
+    </extensions>
+
+    <applicationListeners>
+        <listener class="dev.nextkey.NextKeyListener"
+                  topic="com.intellij.ide.AppLifecycleListener"/>
+    </applicationListeners>
+</idea-plugin>
